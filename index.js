@@ -2,6 +2,7 @@ import express from 'express'
 import 'express-async-errors'
 
 import './database.js'
+import InstanceError from './src/errors/InstanceError.js'
 import routes from './src/routes/index.js'
 
 const app = express()
