@@ -24,6 +24,15 @@ class UsersService {
     return user
   }
 
+  async update(id, data) {
+    const [updatedUser] = await database
+                                .update(data)
+                                .from('users')
+                                .where({ id })
+                                .returning(['id', 'name', 'email', 'roles'])
+    return updatedUser
+  }
+
 }
 
 export default UsersService

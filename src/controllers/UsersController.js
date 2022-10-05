@@ -29,6 +29,15 @@ class UsersController {
 
   async update(request, response){
     // Atualizar o usuário
+    const { id } = request.params
+    const { name, age, roles, email } = request.body
+
+    const user = await usersService.update(id, {
+      name,
+      age,
+      roles,
+      email
+    })
 
     return response.json(user)
   }
