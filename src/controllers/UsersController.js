@@ -1,9 +1,16 @@
+import express from 'express'
+
 import UsersService from "../services/UsersService.js"
 
 const usersService = new UsersService()
 
 class UsersController {
 
+  /**
+   * 
+   * @param {express.Request} request 
+   * @param {express.Response} response
+   */
   async index(request, response) {
     const { id } = request.params
     const { ageStart, ageEnd } = request.query
@@ -13,6 +20,11 @@ class UsersController {
     return response.json(users)
   }
 
+  /**
+   * 
+   * @param {express.Request} request 
+   * @param {express.Response} response
+   */
   async create(request, response){
     const { name, email, age, roles } = request.body
 
@@ -27,6 +39,11 @@ class UsersController {
     return response.status(201).json(user)
   }
 
+  /**
+   * 
+   * @param {express.Request} request 
+   * @param {express.Response} response
+   */
   async update(request, response){
     // Atualizar o usuário
     const { id } = request.params
@@ -42,6 +59,11 @@ class UsersController {
     return response.json(user)
   }
 
+  /**
+   * 
+   * @param {express.Request} request 
+   * @param {express.Response} response
+   */
   async delete(request, response){
     const { id } = request.params
 

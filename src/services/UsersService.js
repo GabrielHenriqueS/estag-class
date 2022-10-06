@@ -1,3 +1,14 @@
+/**
+ * @typedef User
+ * @type {object}
+ * @property {string} name
+ * @property {string} email
+ * @property {number} age
+ * @property {string[]} roles
+ * @property {number} birth_year
+ */
+
+
 import database from '../../database.js'
 
 import InstanceError from '../errors/InstanceError.js'
@@ -7,6 +18,11 @@ import parseResponse from '../utils/parseUserResponse.js'
 
 class UsersService {
 
+  /**
+   * @param {String} id 
+   * @param {{ageStart: string, ageEnd: string}} filter 
+   * @returns {Promise<User[]|User>}
+   */
   async list(id, filter){
 
     const { ageStart, ageEnd } = filter
