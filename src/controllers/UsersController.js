@@ -6,9 +6,9 @@ class UsersController {
 
   async index(request, response) {
     const { id } = request.params
-
+    const { ageStart, ageEnd } = request.query
     // Realizar chamada para listagem de usuários
-    const users = await usersService.list(id)
+    const users = await usersService.list(id, { ageStart, ageEnd })
 
     return response.json(users)
   }
@@ -40,6 +40,14 @@ class UsersController {
     })
 
     return response.json(user)
+  }
+
+  async delete(request, response){
+    const { id } = request.params
+
+    await usersService.delete(id)
+
+    return response.sendStatus(204)
   }
 
 }

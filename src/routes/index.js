@@ -16,6 +16,6 @@ router.post('/users', usersController.create)
 router.put('/users/:id', usersController.update)
 
 // DELETE -> Deletar usuário com base no ID
-
+router.delete('/users/:id', usersController.delete)
 
 export default router
