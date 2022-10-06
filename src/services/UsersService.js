@@ -1,6 +1,7 @@
 import database from '../../database.js'
 
 import InstanceError from '../errors/InstanceError.js'
+import parseResponse from '../utils/parseUserResponse.js'
 
 
 class UsersService {
@@ -23,34 +24,51 @@ class UsersService {
 
     const response = await query
  
-    return response
-    // TODO retornar as roles como array
+    // retornar as roles como array
+    return parseResponse(response)
   }
 
   async create(data) {
 
-    if(data.email){
-      const userAlreadyExists = await database.select('email').from('users').where({ email: data.email }).first()
+    const {name, email, roles, age} = data
+
+    if(email){
+      const userAlreadyExists = await database.select('email').from('users').where({ email }).first()
 
       if(userAlreadyExists){
         throw new InstanceError('Já existe um usuário com o email informado')
       }
     }
 
-    const [user] = await database.insert(data)
+    // "ADMIN,OPERADOR"
+    // "\[\"ADMIN",\"OPERADOR\"\]"
+    const formattedRoles = JSON.stringify(roles.split(','))
+
+    const [user] = await database.insert({name, email, roles: formattedRoles, age})
                                  .into('users')
                                  .returning(['id', 'name', 'age', 'email', 'roles'])
     // TODO retornar as roles como array
-    return user
+    return parseResponse(user)
   }
 
   async update(id, data) {
+
+    const userExists = await database.select('id').from('users').where({ id }).first()
+
+    if(!userExists){
+      throw new InstanceError('Não existe um usuário com o ID informado', 404)
+    }
+
+    if(data.roles){
+      data.roles = JSON.stringify(data.roles.split(','))
+    }
+
     const [updatedUser] = await database
                                 .update(data)
                                 .from('users')
                                 .where({ id })
                                 .returning(['id', 'name', 'age', 'email', 'roles'])
-    return updatedUser
+    return parseResponse(updatedUser)
   }
 
   async delete(id){
