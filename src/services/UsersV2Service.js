@@ -1,7 +1,7 @@
 import database from '../../database.js'
 
 import InstanceError from '../errors/InstanceError.js'
-import getBirthYearByAge from '../utils/getBirthYearByAge.js'
+import getAgeByBirthYear from '../utils/getAgeByBirthYear.js'
 import parseResponse from '../utils/parseUserResponse.js'
 
 
@@ -30,8 +30,9 @@ class UsersService {
   }
 
   async create(data) {
+    const {name, email, roles, birth_year} = data
 
-    const {name, email, roles, age} = data
+    const age = getAgeByBirthYear(birth_year)
 
     if(email){
       const userAlreadyExists = await database.select('email').from('users').where({ email }).first()
@@ -40,8 +41,6 @@ class UsersService {
         throw new InstanceError('Já existe um usuário com o email informado')
       }
     }
-
-    const birth_year = getBirthYearByAge(age)
 
     // "ADMIN,OPERADOR"
     // "\[\"ADMIN",\"OPERADOR\"\]"
@@ -66,8 +65,8 @@ class UsersService {
       data.roles = JSON.stringify(data.roles.split(','))
     }
 
-    if(data.age) {
-      data.birth_year = getBirthYearByAge(data.age)
+    if(data.birth_year){
+      data.age = getAgeByBirthYear(data.birth_year)
     }
 
     const [updatedUser] = await database
@@ -75,6 +74,7 @@ class UsersService {
                                 .from('users')
                                 .where({ id })
                                 .returning(['id', 'name', 'age', 'email', 'roles'])
+
     return parseResponse(updatedUser)
   }
 

@@ -16,6 +16,7 @@ connection.schema.hasTable('users').then((exists) => {
       t.string('email', 100)
       t.integer('age')
       t.json('roles')
+      t.date('birth_year')
     })
   }
 })
