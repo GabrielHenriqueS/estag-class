@@ -1,0 +1,159 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de usuários",
+    "description": "API desenvolvida durante o programa de estágio, nas aulas de design de APIs",
+    "version": "1.0.0"
+  },
+
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Cadastro de usuários",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "João"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "joao@exemplo.com"
+                  },
+                  "age": {
+                    "type": "number",
+                    "example": 28
+                  },
+                  "roles": {
+                    "type": "string",
+                    "example": "ADMIN,OPERADOR"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "João"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "joao@exemplo.com"
+                    },
+                    "age": {
+                      "type": "number",
+                      "example": 28
+                    },
+                    "roles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["ADMIN","OPERADOR"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Usuário com o email informado já existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Já existe um usuário com o email informado"
+                    }
+                  }
+                }
+              }
+            }  
+          }
+        }
+      },
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Retorna uma lista de usuários",
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "number",
+                        "example": 2
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "João"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "joao@exemplo.com"
+                      },
+                      "age": {
+                        "type": "number",
+                        "example": 28
+                      },
+                      "roles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["ADMIN","OPERADOR"]
+                      },
+                      "birth_year": {
+                        "type": "number",
+                        "example": 1980
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "parameter":[]
+      },
+      "delete": {
+        "parameters": []
+      }
+    }
+  }
+
+
+}
