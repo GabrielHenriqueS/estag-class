@@ -108,35 +108,46 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "properties": {
-                      "id": {
-                        "type": "number",
-                        "example": 2
-                      },
-                      "name": {
-                        "type": "string",
-                        "example": "João"
-                      },
-                      "email": {
-                        "type": "string",
-                        "example": "joao@exemplo.com"
-                      },
-                      "age": {
-                        "type": "number",
-                        "example": 28
-                      },
-                      "roles": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "example": ["ADMIN","OPERADOR"]
-                      },
-                      "birth_year": {
-                        "type": "number",
-                        "example": 1980
-                      }
-                    }
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users?ageStart={ageStart}&ageEnd={ageEnd}": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ageStart",
+            "schema": {
+              "type": "number",
+              "example": 20
+            }
+          },
+          {
+            "in": "query",
+            "name": "ageEnd",
+            "schema": {
+              "type": "number",
+              "example": 50
+            }
+          }
+        ],
+        "tags": ["Usuários"],
+        "summary": "Retorna usuários com base no filtro por idade",
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }
@@ -146,14 +157,164 @@
       }
     },
     "/users/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        ],
+        "tags": ["Usuários"],
+        "summary": "Retorna um usuário a partir do ID",
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
       "put": {
-        "parameter":[]
+        "parameters":[
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        ],
+        "tags": ["Usuários"],
+        "summary": "Atualiza usuário com base no ID",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "João"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "joao@exemplo.com"
+                  },
+                  "age": {
+                    "type": "number",
+                    "example": 28
+                  },
+                  "roles": {
+                    "type": "string",
+                    "example": "ADMIN,OPERADOR"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não existe usuário com o ID informado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Não existe um usuário com o ID informado"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
-        "parameters": []
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        ],
+        "tags": ["Usuários"],
+        "summary": "Deleta um usuário com base no ID",
+        "responses": {
+          "204": {
+            "description": "Sucesso"
+          }
+        }
+      }
+    }
+  },
+  
+  "components": {
+    "schemas": {
+      "User": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "João"
+          },
+          "email": {
+            "type": "string",
+            "example": "joao@exemplo.com"
+          },
+          "age": {
+            "type": "number",
+            "example": 28
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["ADMIN","OPERADOR"]
+          },
+          "birth_year": {
+            "type": "number",
+            "example": 1980
+          }
+        }
       }
     }
   }
-
-
 }
