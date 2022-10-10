@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('../services/UsersService.js').User} User
+ * @param {User | User[]} data 
+ * @returns User
+ */
 const parseResponse = (data) => {
   const isArray = Array.isArray(data)
 

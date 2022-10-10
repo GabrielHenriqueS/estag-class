@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {number} age 
+ * @returns number
+ */
+
 const getBirthYearByAge = (age) => {
   const date = new Date()
 

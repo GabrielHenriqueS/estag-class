@@ -45,6 +45,11 @@ class UsersService {
     return parseResponse(response)
   }
 
+  /**
+   * 
+   * @param {User} data 
+   * @returns {Promise<User>}
+   */
   async create(data) {
 
     const {name, email, roles, age} = data
@@ -70,6 +75,12 @@ class UsersService {
     return parseResponse(user)
   }
 
+  /**
+   * 
+   * @param {number} id 
+   * @param {User} data 
+   * @returns {Promise<User>}
+   */
   async update(id, data) {
 
     const userExists = await database.select('id').from('users').where({ id }).first()
@@ -94,6 +105,11 @@ class UsersService {
     return parseResponse(updatedUser)
   }
 
+  /**
+   * 
+   * @param {number} id 
+   * @returns {Promise<>}
+   */
   async delete(id){
     return database.from('users').where({ id }).del()
   }
