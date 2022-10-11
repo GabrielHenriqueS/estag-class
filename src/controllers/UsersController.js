@@ -26,14 +26,15 @@ class UsersController {
    * @param {express.Response} response
    */
   async create(request, response){
-    const { name, email, age, roles } = request.body
+    const { name, email, age, roles, password } = request.body
 
     // Chamar metodo de criação no service
     const user = await usersService.create({
       name,
       email,
       age,
-      roles
+      roles,
+      password
     })
 
     return response.status(201).json(user)
@@ -47,13 +48,14 @@ class UsersController {
   async update(request, response){
     // Atualizar o usuário
     const { id } = request.params
-    const { name, age, roles, email } = request.body
+    const { name, age, roles, email, password } = request.body
 
     const user = await usersService.update(id, {
       name,
       age,
       roles,
-      email
+      email,
+      password
     })
 
     return response.json(user)

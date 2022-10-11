@@ -6,15 +6,16 @@
  * @property {number} age
  * @property {string[]} roles
  * @property {number} birth_year
+ * @property {string} password
  */
 
+import bcrypt from 'bcryptjs'
 
 import database from '../../database.js'
 
 import InstanceError from '../errors/InstanceError.js'
 import getBirthYearByAge from '../utils/getBirthYearByAge.js'
 import parseResponse from '../utils/parseUserResponse.js'
-
 
 class UsersService {
 
@@ -52,7 +53,7 @@ class UsersService {
    */
   async create(data) {
 
-    const {name, email, roles, age} = data
+    const {name, email, roles, age, password} = data
 
     if(email){
       const userAlreadyExists = await database.select('email').from('users').where({ email }).first()
@@ -68,7 +69,9 @@ class UsersService {
     // "\[\"ADMIN",\"OPERADOR\"\]"
     const formattedRoles = JSON.stringify(roles.split(','))
 
-    const [user] = await database.insert({name, email, roles: formattedRoles, age, birth_year})
+    const password_hash = await bcrypt.hash(password, 8)
+
+    const [user] = await database.insert({name, email, roles: formattedRoles, age, birth_year, password_hash})
                                  .into('users')
                                  .returning(['id', 'name', 'age', 'email', 'roles'])
     // TODO retornar as roles como array
@@ -95,6 +98,11 @@ class UsersService {
 
     if(data.age) {
       data.birth_year = getBirthYearByAge(data.age)
+    }
+
+    if(data.password) {
+      data.password_hash = await bcrypt.hash(data.password, 8)
+      delete data.password
     }
 
     const [updatedUser] = await database
